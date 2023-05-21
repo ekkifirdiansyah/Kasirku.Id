@@ -1,0 +1,61 @@
+﻿@inject ICategoryService CategoryService
+
+<div class="top-row ps-3 navbar navbar-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="">Kasirku.Id</a>
+        <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+    </div>
+</div>
+
+<nav class="navbar-vertical navbar">
+    <div class="nav-scroller">
+        <!-- Navbar nav -->
+        <div class="@NavMenuCssClass" @onclick="ToggleNavMenu">
+            <ul class="navbar-nav flex-column" id="sideNavbar">
+                <li class="nav-item">
+                    <a class="nav-link has-arrow"
+                       href="#">
+                        <i data-feather="home" class="nav-icon icon-xs me-2"></i> Dashboard
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">
+                        <i data-feather="layers" class="nav-icon icon-xs me-2"> </i> PIlih Kategori
+                    </a>
+                    <div id="navPages">
+                        <ul class="nav flex-column">
+                            @foreach (var category in CategoryService.Categories)
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link" href="@category.Url">
+                                        <i class="oi oi-check"></i>
+                                        @category.Name
+                                    </a>
+                                </li>
+                            }
+                        </ul>
+                    </div>
+                </li>
+
+            </ul>
+        </div>
+    </div>
+</nav>
+
+@code {
+    private bool collapseNavMenu = true;
+
+    private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;
+
+    private void ToggleNavMenu()
+    {
+        collapseNavMenu = !collapseNavMenu;
+    }
+
+    protected override void OnInitialized()
+    {
+        CategoryService.LoadCategories();
+    }
+}
